@@ -63,7 +63,8 @@ if [ $BASE_URL_CHANGE ]; then
 fi
 wget "${BOUNDING_BOX_ANNOTATIONS}" -O "${BBOX_TAR_BALL}"
 echo "Uncompressing bounding box annotations ..."
-tar xzf "${BBOX_TAR_BALL}" -C "${BBOX_DIR}"
+echo "${BBOX_TAR_BALL}" "${BBOX_DIR}"
+tar xzfv "${BBOX_TAR_BALL}" -C "${BBOX_DIR}"
 
 LABELS_ANNOTATED="${BBOX_DIR}/*"
 NUM_XML=$(ls -1 ${LABELS_ANNOTATED} | wc -l)
@@ -76,7 +77,7 @@ mkdir -p "${OUTPUT_PATH}"
 cd "${OUTDIR}/.."
 echo "Downloading ${VALIDATION_TARBALL} to ${OUTPUT_PATH}."
 wget -nd -c "${BASE_URL}/${VALIDATION_TARBALL}"
-tar xf "${VALIDATION_TARBALL}" -C "${OUTPUT_PATH}"
+tar xfv "${VALIDATION_TARBALL}" -C "${OUTPUT_PATH}"
 
 # Download all images from the ImageNet 2012 train dataset.
 TRAIN_TARBALL="ILSVRC2012_img_train.tar"
@@ -97,8 +98,8 @@ while read SYNSET; do
   rm -rf "${OUTPUT_PATH}/${SYNSET}/*"
 
   # Uncompress into the directory.
-  tar xf "${TRAIN_TARBALL}" "${SYNSET}.tar"
-  tar xf "${SYNSET}.tar" -C "${OUTPUT_PATH}/${SYNSET}/"
+  tar xfv "${TRAIN_TARBALL}" "${SYNSET}.tar"
+  tar xfv "${SYNSET}.tar" -C "${OUTPUT_PATH}/${SYNSET}/"
   rm -f "${SYNSET}.tar"
 
   echo "Finished processing: ${SYNSET}"
